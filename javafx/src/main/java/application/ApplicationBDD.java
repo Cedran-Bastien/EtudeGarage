@@ -19,7 +19,7 @@ public class ApplicationBDD extends Application {
     public void start(Stage stage) throws IOException {
         Vue vue = new Vue(VuParametre.INDICE_LISTE_VEHICULE);
         vue.setPadding(new Insets(10));
-        Scene scene = new Scene(vue);
+        Scene scene = new Scene(vue,600,400);
 
         Controller cont = new Controller(vue);
         scene.addEventHandler(ActionEvent.ACTION,cont);

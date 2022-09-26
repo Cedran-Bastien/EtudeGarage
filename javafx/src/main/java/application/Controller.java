@@ -56,59 +56,67 @@ public class Controller implements EventHandler<ActionEvent> {
                         String cat = (((TextField)((GridPane)(this.vue.getChildren().get(1))).getChildren().get(4))).getText();
                         String dateD  =(((TextField)((GridPane)(this.vue.getChildren().get(1))).getChildren().get(5))).getText();
                         String dateF  =(((TextField)((GridPane)(this.vue.getChildren().get(1))).getChildren().get(6))).getText();
-                        Map<String, String> map = null;
+                        String[][] res= null;
                         try {
-                            map = Jdbc.selectVehicule(cat,dateD,dateF);
+                            res = Jdbc.selectVehicule(cat,dateD,dateF);
                         } catch (SQLException e) {
                             e.printStackTrace();
                         } catch (ClassNotFoundException e) {
                             e.printStackTrace();
                         }
-                        this.vue.afficherMap(map);
+                        this.vue.afficherTab(res);
                         break;
                     case 2:
-                        String imma = (((TextField)((GridPane)(this.vue.getChildren().get(1))).getChildren().get(0))).getText();
-                        dateD  =(((TextField)((GridPane)(this.vue.getChildren().get(1))).getChildren().get(1))).getText();
-                        dateF  =(((TextField)((GridPane)(this.vue.getChildren().get(1))).getChildren().get(2))).getText();
+                        String imma = (((TextField)((GridPane)(this.vue.getChildren().get(1))).getChildren().get(4))).getText();
+                        dateD  =(((TextField)((GridPane)(this.vue.getChildren().get(1))).getChildren().get(5))).getText();
+                        dateF  =(((TextField)((GridPane)(this.vue.getChildren().get(1))).getChildren().get(6))).getText();
                         try {
                             Jdbc.updateReservation(dateD,dateF,imma);
+                            this.vue.resultat.setText("Mise a jour effectuer");
                         } catch (SQLException e) {
                             e.printStackTrace();
                         } catch (ClassNotFoundException e) {
+                            this.vue.resultat.setText("erreur : verifier la validité des valeur entrées");
                             e.printStackTrace();
                         }
+
                         break;
                     case 3:
-                        String modele = (((TextField)((GridPane)(this.vue.getChildren().get(1))).getChildren().get(0))).getText();
-                        int duree  = Integer.parseInt((((TextField)((GridPane)(this.vue.getChildren().get(1))).getChildren().get(1))).getText());
-                        try {
-                            map = Jdbc.calculeTarif(modele,duree);
+                        String modele = (((TextField)((GridPane)(this.vue.getChildren().get(1))).getChildren().get(4))).getText();
+                        int duree  = Integer.parseInt((((TextField)((GridPane)(this.vue.getChildren().get(1))).getChildren().get(5))).getText());
+                        String[] res1= null;
+                         try {
+                            res1 = Jdbc.calculeTarif(modele,duree);
                         } catch (SQLException e) {
                             e.printStackTrace();
                         } catch (ClassNotFoundException e) {
                             e.printStackTrace();
                         }
+                         this.vue.afficherTab(res1);
                         break;
                     case 4:
+                        res1= null;
                         try {
-                            map = Jdbc.afficherAgence();
+                            res1= Jdbc.afficherAgence();
                         } catch (SQLException e) {
                             e.printStackTrace();
                         } catch (ClassNotFoundException e) {
                             e.printStackTrace();
                         }
+                        this.vue.afficherTab(res1);
                         break;
                     case 5:
-                        String modele1 = (((TextField)((GridPane)(this.vue.getChildren().get(1))).getChildren().get(0))).getText();
-                        String modele2 = (((TextField)((GridPane)(this.vue.getChildren().get(1))).getChildren().get(1))).getText();
-
+                        String modele1 = (((TextField)((GridPane)(this.vue.getChildren().get(1))).getChildren().get(4))).getText();
+                        String modele2 = (((TextField)((GridPane)(this.vue.getChildren().get(1))).getChildren().get(5))).getText();
+                        res = null;
                         try {
-                            map = Jdbc.afficherClient(modele1,modele2);
+                            res = Jdbc.afficherClient(modele1,modele2);
                         } catch (SQLException e) {
                             e.printStackTrace();
                         } catch (ClassNotFoundException e) {
                             e.printStackTrace();
                         }
+                        this.vue.afficherTab(res);
                         break;
                 }
         }

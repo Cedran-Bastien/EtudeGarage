@@ -17,7 +17,7 @@ public class Jdbc {
         return connection;
     }
 
-    public static Map selectVehicule(String categorie, String dateDebue, String dateFin) throws SQLException, ClassNotFoundException {
+    public static String[][] selectVehicule(String categorie, String dateDebue, String dateFin) throws SQLException, ClassNotFoundException {
         Connection connection = Jdbc.connectionOJDBC("bastie141u", "207Oracleapt!");
         PreparedStatement pr = connection.prepareStatement("select vehicule.no_imm, modele FROM vehicule, categorie1, calendrier\n" +
                 "                WHERE vehicule.no_imm=calendrier.no_imm\n" +
@@ -31,9 +31,15 @@ public class Jdbc {
         ResultSet result = pr.executeQuery();
 
 
-        Map<String,String> resultat = new HashMap<String, String>();
+        String[][] resultat = new String[2][10];
+        int ligne = 0;
         while (result.next()){
-            resultat.put(result.getString(1),result.getString(2));
+            for (int i=1;i<=2;i++){
+                System.out.println(result.getString(i));
+                resultat[i-1][ligne] = result.getString(i);
+            }
+            ligne++;
+
         }
 
         connection.close();
@@ -47,7 +53,7 @@ public class Jdbc {
         PreparedStatement pr = connection.prepareStatement("Update calendrier set paslibre='x' " +
                 "where no_imm=? and datejour " +
                 "between to_date(?) " +
-                "and to_date(?);");
+                "and to_date(?)");
         pr.setString(1, numImma);
         pr.setString(2, dateDebut);
         pr.setString(3, dateFin);
@@ -55,7 +61,7 @@ public class Jdbc {
         connection.close();
     }
 
-    public static Map calculeTarif(String modéle, int duree) throws SQLException, ClassNotFoundException {
+    public static String[] calculeTarif(String modéle, int duree) throws SQLException, ClassNotFoundException {
         Connection connection = Jdbc.connectionOJDBC("bastie141u", "207Oracleapt!");
         PreparedStatement pr = connection.prepareStatement("select TARIF_JOUR\n" +
                 "    from TARIF,VEHICULE, CATEGORIE1\n" +
@@ -65,9 +71,11 @@ public class Jdbc {
         pr.setString(1, modéle);
         ResultSet result = pr.executeQuery();
 
-        Map<String,String> resultat = new HashMap<String, String>();
+        String[] resultat = new String[2];
+        int i =0;
         while (result.next()){
-            resultat.put(result.getString(1),"");
+            resultat[i] ="montant : "+ (Integer.parseInt(result.getString(1)))*duree+ " €";
+            i++;
         }
 
         connection.close();
@@ -76,18 +84,20 @@ public class Jdbc {
     }
 
 
-    public static Map afficherAgence() throws SQLException, ClassNotFoundException {
+    public static String[] afficherAgence() throws SQLException, ClassNotFoundException {
         Connection connection = Jdbc.connectionOJDBC("bastie141u", "207Oracleapt!");
-        PreparedStatement pr = connection.prepareStatement("SELECT AGENCE.CODE_AG FROM AGENCE,VEHICULE,CATEGORIE1\n" +
+        PreparedStatement pr = connection.prepareStatement("SELECT DISTINCT AGENCE.CODE_AG FROM AGENCE,VEHICULE,CATEGORIE1\n" +
                 "    where AGENCE.CODE_AG=VEHICULE.CODE_AG\n" +
                 "    and VEHICULE.CODE_CATEG=CATEGORIE1.CODE_CATEG\n" +
                 "    having COUNT(*) = (select COUNt(*) from  CATEGORIE1)\n" +
                 "    group by CATEGORIE1.CODE_CATEG, AGENCE.CODE_AG");
         ResultSet result = pr.executeQuery();
 
-        Map<String,String> resultat = new HashMap<String, String>();
+        String[] resultat = new String[2];
+        int i=1;
         while (result.next()){
-            resultat.put(result.getString(1),result.getString(2));
+            resultat[i-1] ="Agence : "+ result.getString(1);
+            i++;
         }
 
         connection.close();
@@ -95,7 +105,7 @@ public class Jdbc {
         return resultat;
     }
 
-    public static Map afficherClient(String modele1, String modele2) throws SQLException, ClassNotFoundException {
+    public static String[][] afficherClient(String modele1, String modele2) throws SQLException, ClassNotFoundException {
         Connection connection = Jdbc.connectionOJDBC("bastie141u", "207Oracleapt!");
         PreparedStatement pr = connection.prepareStatement("(select NOM, VILLE, CODPOSTAL\n" +
                 "    from CLIENT1,DOSSIER\n" +
@@ -105,14 +115,18 @@ public class Jdbc {
                 "(select NOM, VILLE, CODPOSTAL\n" +
                 "    from CLIENT1,DOSSIER\n" +
                 "    where CLIENT1.CODE_CLI=DOSSIER.CODE_CLI\n" +
-                "    and NO_IMM like ?);");
+                "    and NO_IMM like ?)");
         pr.setString(1, modele1);
         pr.setString(2, modele2);
         ResultSet result = pr.executeQuery();
 
-        Map<String,String> resultat = new HashMap<String, String>();
+        String[][] resultat = new String[3][10];
+        int ligne = 0;
         while (result.next()){
-            resultat.put(result.getString(1),result.getString(2));
+            for (int i=1;i<=3;i++){
+                resultat[i-1][ligne] = result.getString(i);
+            }
+            ligne++;
         }
 
         connection.close();
