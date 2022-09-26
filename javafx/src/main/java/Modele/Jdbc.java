@@ -67,7 +67,7 @@ public class Jdbc {
 
         Map<String,String> resultat = new HashMap<String, String>();
         while (result.next()){
-            resultat.put(result.getString(1),result.getString(2));
+            resultat.put(result.getString(1),"");
         }
 
         connection.close();
@@ -78,11 +78,11 @@ public class Jdbc {
 
     public static Map afficherAgence() throws SQLException, ClassNotFoundException {
         Connection connection = Jdbc.connectionOJDBC("bastie141u", "207Oracleapt!");
-        PreparedStatement pr = connection.prepareStatement("select TARIF_JOUR\n" +
-                "    from TARIF,VEHICULE, CATEGORIE1\n" +
-                "    where TARIF.CODE_TARIF=CATEGORIE1.CODE_TARIF\n" +
-                "    and CATEGORIE1.CODE_CATEG=VEHICULE.CODE_CATEG\n" +
-                "    and MODELE like ?");
+        PreparedStatement pr = connection.prepareStatement("SELECT AGENCE.CODE_AG FROM AGENCE,VEHICULE,CATEGORIE1\n" +
+                "    where AGENCE.CODE_AG=VEHICULE.CODE_AG\n" +
+                "    and VEHICULE.CODE_CATEG=CATEGORIE1.CODE_CATEG\n" +
+                "    having COUNT(*) = (select COUNt(*) from  CATEGORIE1)\n" +
+                "    group by CATEGORIE1.CODE_CATEG, AGENCE.CODE_AG");
         ResultSet result = pr.executeQuery();
 
         Map<String,String> resultat = new HashMap<String, String>();

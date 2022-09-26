@@ -32,25 +32,30 @@ public class Controller implements EventHandler<ActionEvent> {
         switch (s){
             case "liste des vehicules":
                 this.vue.updateVue(VuParametre.INDICE_LISTE_VEHICULE);
+                this.indiceRequete= VuParametre.INDICE_LISTE_VEHICULE;
                 break;
             case "Mise a jour Calendrier":
                 this.vue.updateVue(VuParametre.INDICE_UPDATE);
+                this.indiceRequete=VuParametre.INDICE_UPDATE;
                 break;
             case "Tarif de la location":
                 this.vue.updateVue(VuParametre.INDICE_TARIF);
+                this.indiceRequete=VuParametre.INDICE_TARIF;
                 break;
             case "Affichage agence":
                 this.vue.updateVue(VuParametre.INDICE_LISTE_AGENCE);
+                this.indiceRequete=VuParametre.INDICE_LISTE_AGENCE;
                 break;
             case "Liste de clients":
                 this.vue.updateVue(VuParametre.INDICE_LISTE_CLIENT);
+                this.indiceRequete=VuParametre.INDICE_LISTE_CLIENT;
                 break;
             case "Exécuter":
                 switch (this.indiceRequete){
                     case 1:
-                        String cat = (((TextField)((GridPane)(this.vue.getChildren().get(1))).getChildren().get(0))).getText();
-                        String dateD  =(((TextField)((GridPane)(this.vue.getChildren().get(1))).getChildren().get(1))).getText();
-                        String dateF  =(((TextField)((GridPane)(this.vue.getChildren().get(1))).getChildren().get(2))).getText();
+                        String cat = (((TextField)((GridPane)(this.vue.getChildren().get(1))).getChildren().get(4))).getText();
+                        String dateD  =(((TextField)((GridPane)(this.vue.getChildren().get(1))).getChildren().get(5))).getText();
+                        String dateF  =(((TextField)((GridPane)(this.vue.getChildren().get(1))).getChildren().get(6))).getText();
                         Map<String, String> map = null;
                         try {
                             map = Jdbc.selectVehicule(cat,dateD,dateF);

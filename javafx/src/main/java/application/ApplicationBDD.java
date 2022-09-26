@@ -4,6 +4,8 @@ import Vue.VuParametre;
 
 import Vue.Vue;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -18,6 +20,9 @@ public class ApplicationBDD extends Application {
         Vue vue = new Vue(VuParametre.INDICE_LISTE_VEHICULE);
         vue.setPadding(new Insets(10));
         Scene scene = new Scene(vue);
+
+        Controller cont = new Controller(vue);
+        scene.addEventHandler(ActionEvent.ACTION,cont);
 
         stage.setTitle("OJDBC Project");
         stage.setScene(scene);
